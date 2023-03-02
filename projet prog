@@ -1,1 +1,35 @@
+function [FirstBall,SecondBall,LastBall, NbBallsMoved] = GetBallMoveOrder(Xr, Yr, Xy, Yy, Xw, Yw, MoveDistPx)
+% Calcule les distances et les index des premiers deplacements de chaque
+% balle
+[RedIdx, RedDist] = GetFirstMoveIdx(Xr, Yr, MoveDistPx);
+[YellowIdx, YellowDist] = GetFirstMoveIdx(Xy, Yy, MoveDistPx);
+[WhiteIdx, WhiteDist] = GetFirstMoveIdx(Xw, Yw, MoveDistPx);
 
+% donne des indices impossibles aux boules qui ne bougent pas
+if isempty(RedIdx)
+    RedIdx = length(Xr)+1;
+end
+if isempty(YellowIdx)
+    YellowIdx = length(Xy)+1;
+end
+if isempty(WhiteIdx)
+    WhiteIdx = length(Xw)+1;
+end
+
+% Combine les indices et les distances dans une matrice
+BallInfo = [1 RedIdx RedDist;
+            2 YellowIdx YellowDist;
+            3 WhiteIdx WhiteDist];
+
+% organise la matrice par first move index, puis par distance si les indices sont egaux
+BallInfo = sortrows(BallInfo, [2, 3], {'ascend', 'descend'});
+
+% sort les infos sur les boules de la matrice organisée
+FirstBall = BallInfo(1,1);
+SecondBall = BallInfo(2,1);
+LastBall = BallInfo(3,1);
+
+% compte le nombre de boules qui ont bougé
+NbBallsMoved = sum([RedIdx, YellowIdx, WhiteIdx] ~= length(Xr)+1);
+%~= opérateur de comparaison : "différend de"
+end
