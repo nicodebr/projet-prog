@@ -1,0 +1,6 @@
+function PathLength = GetBallPathLength(X, Y)
+% Calcule la distance en pixels parcourue par une boule
+n = length(X)-1 ;
+k = 1:n ;
+PathLength = sum(sqrt((X(k+1)-X(k)).^2 + (Y(k+1)-Y(k)).^2));
+end
