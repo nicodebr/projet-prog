@@ -1,0 +1,26 @@
+function [IdxTouch]=GetTouchIdx(X,Y,Xmin, Xmax, Ymin, Ymax, BallBorderDist)
+%bord gauche
+IdxLeft=find(X<Xmin+BallBorderDist);
+IdxRight=find(X>Xmax-BallBorderDist);
+IdxHigh=find(Y>Ymax-BallBorderDist);
+IdxLow=find(Y<Ymin+BallBorderDist);
+
+IdxSuccessiveLeft=find(diff(IdxLeft)==1);
+IdxLeft(IdxSuccessiveLeft+1)=[];
+
+IdxSuccessiveRight=find(diff(IdxRight)==1);
+IdxRight(IdxSuccessiveRight+1)=[];
+
+
+IdxSuccessiveLow=find(diff(IdxLow)==1);
+IdxLow(IdxSuccessiveLow+1)=[];
+
+IdxSuccessiveHigh=find(diff(IdxHigh)==1);
+IdxHigh(IdxSuccessiveHigh+1)=[];
+
+
+%controle que la position initiale de la boule n'implique pas un touch 
+IdxTouch=sort([IdxLeft IdxRight IdxLow IdxHigh]);
+IdxTouch(find(IdxTouch==1))=[];
+
+end
