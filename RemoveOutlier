@@ -1,0 +1,7 @@
+function [X, Y] = RemoveOutlier(X, Y)
+    is_outlier_Y = isoutlier(Y, 'movmedian', 10);
+    is_outlier_X = isoutlier(X, 'movmedian', 10);
+    is_outlier = is_outlier_Y | is_outlier_X;
+    Y(is_outlier) = Y(find(is_outlier) - 1);
+    X(is_outlier) = X(find(is_outlier) - 1);
+end
