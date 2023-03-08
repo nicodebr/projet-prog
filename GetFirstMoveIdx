@@ -1,4 +1,4 @@
-function FirstMoveIdx=GetFirstMoveIdx(X,Y, MoveDistPx)
+function [FirstMoveIdx,FirstMoveDist]=GetFirstMoveIdx(X,Y, MoveDistPx)
 %trouve l index correspondant au 1 e déplacement de la boule, i.e. quand la distance depuis la coordonnée initiale > MoveDistPx avec MoveDistPx = 9.
 X1 = X(1);
 Y1 = Y(1);
@@ -8,7 +8,9 @@ Distances = sqrt((X - X(1)).^2 + (Y - Y(1)).^2);
 Indexes = find(Distances > MoveDistPx);
 if isempty(Indexes)
     FirstMoveIdx = [];
+    FirstMoveDist = [];
 else
     FirstMoveIdx = Indexes(1);
+    FirstMoveDist = Distances;
 
 end
