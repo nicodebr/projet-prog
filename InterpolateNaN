@@ -1,22 +1,25 @@
 %ChatGPT
 function [X,Y] = InterpolateNan(X,Y)
-    % Trouver les valeurs NaN
-    nan_inds = isnan(X);
-    
-    % Trouver les valeurs non-NaN
-    valid_inds = ~isnan(X);
-    
-    % Interpoler les prochaines valeurs valides
-    X_interp = interp1(valid_inds(find(valid_inds, 1, 'first')):valid_inds(find(valid_inds, 1, 'last')), X(valid_inds), find(nan_inds), 'next');
-    Y_interp = interp1(valid_inds(find(valid_inds, 1, 'first')):valid_inds(find(valid_inds, 1, 'last')), Y(valid_inds), find(nan_inds), 'next');
-    
-    % Ajouter un '0' pour traiter le cas où la première valeur est NaN
-    if isnan(X(1))
-        X_interp = [0 X_interp];
-        Y_interp = [0 Y_interp];
-    end
-    
-    % Remplacer les NaN par les nouvelles valeurs interpolées
-    X(nan_inds) = X_interp;
-    Y(nan_inds) = Y_interp;
+X(end+1) = 0; % ajoute l'élément à la fin du vecteur
+X = circshift(X,1); % décale tous les éléments vers la droite
+Y(end+1) = 0;
+Y = circshift(Y,1);
+
+% Trouver les indices des valeurs NaN
+nan_idx_X = isnan(X);
+nan_idx_Y = isnan(Y);
+
+% Trouver les indices des valeurs non-NaN
+valid_idx_X = find(~nan_idx_X);
+valid_idx_Y = find(~nan_idx_Y);
+
+% Interpoler les valeurs manquantes
+X(nan_idx_X) = interp1(valid_idx_X, X(valid_idx_X), find(nan_idx_X), 'next');
+Y(nan_idx_Y) = interp1(valid_idx_Y, Y(valid_idx_Y), find(nan_idx_Y), 'next');
+
+X(1)=[];
+Y(1)=[];
+
+X
+Y
 end
