@@ -11,23 +11,7 @@ Yr = 480-Yr;
 Yy = 480-Yy;
 Yw = 480-Yw;
 
-min_Xr = min(Xr) ;
-min_Xy = min(Xy) ;
-min_Xw = min(Xw) ;
-Xmin = min([min_Xr min_Xy min_Xw]) ;
-min_Yr = min(Yr);
-min_Yy = min(Yy);
-min_Yw = min(Yw);
-Ymin = min([min_Yr min_Yy min_Yw]) ;
-
-max_Xr = max(Xr) ;
-max_Xy = max(Xy) ;
-max_Xw = max(Xw) ;
-Xmax = max([max_Xr max_Xy max_Xw]) ;
-max_Yr = max(Yr);
-max_Yy = max(Yy);
-max_Yw = max(Yw);
-Ymax = max([max_Yr max_Yy max_Yw]) ;
+[Xmin, Xmax, Ymin, Ymax] = GetFrame(Xr, Yr, Xy, Yy, Xw, Yw)
 
 long_cadre = abs(Xmax-Xmin) ;
 haut_cadre = abs(Ymax-Ymin) ;
@@ -37,3 +21,17 @@ hold ON; %pour avoir tout sur la meme figure%
 plot(Xr, Yr,'r*-');
 plot(Xy, Yy,'go-');
 plot(Xw, Yw,'b+-');
+
+% Obtenir la date et l'heure actuelles
+now_time = datetime('now');
+% Convertir l'objet de date et heure en une chaîne de caractères
+time_string = datestr(now_time);
+% Créer le titre avec la date et l'heure
+titre = sprintf("Scores sheet - nom de la sequence - Date et heure : %s", time_string);
+% Ajouter le titre au graphique
+title(titre);
+
+%ajouter les étoile pour la position initiale des boules
+plot(Xr(1), Yr(1), 'p', 'MarkerSize', 10, 'MarkerEdgeColor', 'red');
+plot(Xy(1), Yy(1), 'p', 'MarkerSize', 10, 'MarkerEdgeColor', 'green');
+plot(Xw(1), Yw(1), 'p', 'MarkerSize', 10, 'MarkerEdgeColor', 'blue');
