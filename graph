@@ -18,9 +18,9 @@ haut_cadre = abs(Ymax-Ymin) ;
 
 rectangle('position',[Xmin Ymin long_cadre haut_cadre]); 
 hold ON; %pour avoir tout sur la meme figure%
-plot(Xr, Yr,'r*-');
-plot(Xy, Yy,'go-');
-plot(Xw, Yw,'b+-');
+plot(Xr, Yr, 'color', 'r', 'marker', '.', 'linestyle', '-');
+plot(Xy, Yy, 'color', '#E6D700', 'marker', '.', 'linestyle', '-');
+plot(Xw, Yw, 'color', 'b', 'marker', '.', 'linestyle', '-');
 
 % Obtenir la date et l'heure actuelles
 now_time = datetime('now');
@@ -32,6 +32,16 @@ titre = sprintf("Scores sheet - nom de la sequence - Date et heure : %s", time_s
 title(titre);
 
 %ajouter les étoile pour la position initiale des boules
-plot(Xr(1), Yr(1), 'p', 'MarkerSize', 10, 'MarkerEdgeColor', 'red');
-plot(Xy(1), Yy(1), 'p', 'MarkerSize', 10, 'MarkerEdgeColor', 'green');
-plot(Xw(1), Yw(1), 'p', 'MarkerSize', 10, 'MarkerEdgeColor', 'blue');
+plot(Xr(1), Yr(1), 'h', 'MarkerSize', 15, 'MarkerEdgeColor', '#800020');
+plot(Xy(1), Yy(1), 'h', 'MarkerSize', 15, 'MarkerEdgeColor', 'green');
+plot(Xw(1), Yw(1), 'h', 'MarkerSize', 15, 'MarkerEdgeColor', 'blue');
+
+%entourer les rebonds de la première boule taper
+Ball_Order_X = {Xr, Xy, Xw};
+Ball_Order_Y = {Yr, Yy, Yw};
+First_Ball = GetBallMoveOrder(Xr, Yr, Xy, Yy, Xw, Yw, 9)
+First_Ball_X = Ball_Order_X{First_Ball}
+First_Ball_Y = Ball_Order_Y{First_Ball}
+IdxTouch = GetTouchIdx(First_Ball_X,First_Ball_Y, Xmin, Xmax, Ymin, Ymax, 9);
+circleSize = 100; % définir la taille du cercle
+scatter(First_Ball_X(IdxTouch), First_Ball_Y(IdxTouch), circleSize, 'g', 'LineWidth', 1, 'MarkerFaceColor', 'none', 'MarkerEdgeColor', 'g');
