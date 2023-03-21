@@ -48,5 +48,23 @@ scatter(First_Ball_X(IdxTouch), First_Ball_Y(IdxTouch), circleSize, 'g', 'LineWi
 
 %texte sous le graphique
 color = ["red"; "yellow"; "white"];
-txt1 = text((Xmin+Xmax)/2, Ymin-0.1*(Ymax-Ymin), ['Score sheet for ', color(First_Ball, :)], 'HorizontalAlignment', 'center', 'FontSize', 12);
+
+num_balls = 3; % Remplacer 3 par le nombre de boules approprié
+text_str = sprintf('Score sheet for %s          %d ball(s) moved', color(First_Ball,:), num_balls);
+
+% Afficher le texte aligné respectivement à gauche et à droite
+txt1 = text(Xmin, Ymin-0.1*(Ymax-Ymin), sprintf('%s', strtrim(text_str(1:end-16))), 'HorizontalAlignment', 'left', 'FontSize', 12);
+txt2 = text(Xmax, Ymin-0.1*(Ymax-Ymin), sprintf('%d ball(s) moved', num_balls), 'HorizontalAlignment', 'right', 'FontSize', 12);
 uistack(txt1, 'top');
+uistack(txt2, 'top');
+
+% Afficher le texte "win" aligné à gauche
+txt3 = text(Xmin, Ymax+0.05*(Ymax-Ymin), '---win---', 'HorizontalAlignment', 'left', 'FontSize', 12);
+
+% Afficher le nombre de bandes touchées aligné à droite
+num_bands = 2; % Remplacer 2 par le nombre de bandes touchées approprié
+txt4 = text(Xmax, Ymax+0.05*(Ymax-Ymin), sprintf('%d band(s) touched', num_bands), 'HorizontalAlignment', 'right', 'FontSize', 12);
+
+% Déplacer les textes en haut de la pile pour qu'ils soient au-dessus de tout le reste
+uistack(txt3, 'top');
+uistack(txt4, 'top');
