@@ -40,13 +40,13 @@ plot(Xw(1), Yw(1), 'h', 'MarkerSize', 15, 'MarkerEdgeColor', 'blue');
 Ball_Order_X = {Xr, Xy, Xw};
 Ball_Order_Y = {Yr, Yy, Yw};
 First_Ball = GetBallMoveOrder(Xr, Yr, Xy, Yy, Xw, Yw, 9)
-First_Ball_X = Ball_Order_X{First_Ball}
-First_Ball_Y = Ball_Order_Y{First_Ball}
+First_Ball_X = Ball_Order_X{First_Ball};
+First_Ball_Y = Ball_Order_Y{First_Ball};
 IdxTouch = GetTouchIdx(First_Ball_X,First_Ball_Y, Xmin, Xmax, Ymin, Ymax, 9);
 circleSize = 100; % définir la taille du cercle
 scatter(First_Ball_X(IdxTouch), First_Ball_Y(IdxTouch), circleSize, 'g', 'LineWidth', 1, 'MarkerFaceColor', 'none', 'MarkerEdgeColor', 'g');
 
 %texte sous le graphique
-color = ['red' 'yellow' 'white'];
-txt1 = text((Xmin+Xmax)/2, Ymin-0.1*(Ymax-Ymin), ['Score sheet for ', color(First_Ball)], 'HorizontalAlignment', 'center', 'FontSize', 12);
+color = ["red"; "yellow"; "white"];
+txt1 = text((Xmin+Xmax)/2, Ymin-0.1*(Ymax-Ymin), ['Score sheet for ', color(First_Ball, :)], 'HorizontalAlignment', 'center', 'FontSize', 12);
 uistack(txt1, 'top');
