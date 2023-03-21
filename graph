@@ -19,7 +19,7 @@ haut_cadre = abs(Ymax-Ymin) ;
 rectangle('position',[Xmin Ymin long_cadre haut_cadre]); 
 hold ON; %pour avoir tout sur la meme figure%
 plot(Xr, Yr, 'color', 'r', 'marker', '.', 'linestyle', '-');
-plot(Xy, Yy, 'color', '#E6D700', 'marker', '.', 'linestyle', '-');
+plot(Xy, Yy, 'color', 'y', 'marker', '.', 'linestyle', '-');
 plot(Xw, Yw, 'color', 'b', 'marker', '.', 'linestyle', '-');
 
 % Obtenir la date et l'heure actuelles
@@ -45,3 +45,8 @@ First_Ball_Y = Ball_Order_Y{First_Ball}
 IdxTouch = GetTouchIdx(First_Ball_X,First_Ball_Y, Xmin, Xmax, Ymin, Ymax, 9);
 circleSize = 100; % définir la taille du cercle
 scatter(First_Ball_X(IdxTouch), First_Ball_Y(IdxTouch), circleSize, 'g', 'LineWidth', 1, 'MarkerFaceColor', 'none', 'MarkerEdgeColor', 'g');
+
+%texte sous le graphique
+color = ['red' 'yellow' 'white'];
+txt1 = text((Xmin+Xmax)/2, Ymin-0.1*(Ymax-Ymin), ['Score sheet for ', color(First_Ball)], 'HorizontalAlignment', 'center', 'FontSize', 12);
+uistack(txt1, 'top');
