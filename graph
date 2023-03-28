@@ -50,21 +50,20 @@ scatter(First_Ball_X(IdxTouch), First_Ball_Y(IdxTouch), circleSize, 'g', 'LineWi
 color = ["red"; "yellow"; "white"];
 
 num_balls = 3; % Remplacer 3 par le nombre de boules approprié
-text_str = sprintf('Score sheet for %s          %d ball(s) moved', color(First_Ball,:), num_balls);
+num_touched = 5;
+result = ["win","lose"];
+red_dist = GetBallPathLength(Xr,Yr);
+yellow_dist = GetBallPathLength(Xy,Yy);
+white_dist = GetBallPathLength(Xw,Yw);
 
+
+set(gca,'XColor','none','YColor','none');
+axis([Xmin,Xmax,Ymin-100,Ymax+20]);
 % Afficher le texte aligné respectivement à gauche et à droite
-txt1 = text(Xmin, Ymin-0.1*(Ymax-Ymin), sprintf('%s', strtrim(text_str(1:end-16))), 'HorizontalAlignment', 'left', 'FontSize', 12);
-txt2 = text(Xmax, Ymin-0.1*(Ymax-Ymin), sprintf('%d ball(s) moved', num_balls), 'HorizontalAlignment', 'right', 'FontSize', 12);
-uistack(txt1, 'top');
-uistack(txt2, 'top');
-
-% Afficher le texte "win" aligné à gauche
-txt3 = text(Xmin, Ymax+0.05*(Ymax-Ymin), '---win---', 'HorizontalAlignment', 'left', 'FontSize', 12);
-
-% Afficher le nombre de bandes touchées aligné à droite
-num_bands = 2; % Remplacer 2 par le nombre de bandes touchées approprié
-txt4 = text(Xmax, Ymax+0.05*(Ymax-Ymin), sprintf('%d band(s) touched', num_bands), 'HorizontalAlignment', 'right', 'FontSize', 12);
-
-% Déplacer les textes en haut de la pile pour qu'ils soient au-dessus de tout le reste
-uistack(txt3, 'top');
-uistack(txt4, 'top');
+txt1 = text(128,70, sprintf('Score sheet for "%s"', color(First_Ball,:)), 'HorizontalAlignment', 'left', 'FontSize', 12);
+txt2 = text(725,70, sprintf('%d ball(s) moved', num_balls), 'HorizontalAlignment', 'right', 'FontSize', 12);
+txt3 = text(128,40,sprintf('---%s---',result(1)), 'HorizontalAlignment', 'left', 'FontSize', 12);
+txt4 = text(725,40,sprintf('%d ball(s) moved', num_touched), 'HorizontalAlignment', 'right', 'FontSize', 12);
+txt5 = text(128,10,sprintf('red_{d}: %.0f',red_dist), 'HorizontalAlignment', 'left', 'FontSize', 12);
+txt6 = text(426,10,sprintf('yellow_{d}: %.0f',yellow_dist), 'HorizontalAlignment', 'center', 'FontSize', 12);
+txt7 = text(725,10,sprintf('white_{d}: %.0f',white_dist), 'HorizontalAlignment', 'right', 'FontSize', 12);
