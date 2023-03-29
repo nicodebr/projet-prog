@@ -11,7 +11,7 @@ Yr = 480-Yr;
 Yy = 480-Yy;
 Yw = 480-Yw;
 
-[Xmin, Xmax, Ymin, Ymax] = GetFrame(Xr, Yr, Xy, Yy, Xw, Yw)
+[Xmin, Xmax, Ymin, Ymax] = GetFrame(Xr, Yr, Xy, Yy, Xw, Yw);
 
 long_cadre = abs(Xmax-Xmin) ;
 haut_cadre = abs(Ymax-Ymin) ;
@@ -25,7 +25,7 @@ plot(Xw, Yw, 'color', 'b', 'marker', '.', 'linestyle', '-');
 % Obtenir la date et l'heure actuelles
 now_time = datetime('now');
 % Convertir l'objet de date et heure en une chaîne de caractères
-time_string = datestr(now_time);
+time_string = datetime(now_time);
 % Créer le titre avec la date et l'heure
 titre = sprintf("Scores sheet - nom de la sequence - Date et heure : %s", time_string);
 % Ajouter le titre au graphique
@@ -39,7 +39,7 @@ plot(Xw(1), Yw(1), 'h', 'MarkerSize', 15, 'MarkerEdgeColor', 'blue');
 %entourer les rebonds de la première boule taper
 Ball_Order_X = {Xr, Xy, Xw};
 Ball_Order_Y = {Yr, Yy, Yw};
-First_Ball = GetBallMoveOrder(Xr, Yr, Xy, Yy, Xw, Yw, 9)
+First_Ball = GetBallMoveOrder(Xr, Yr, Xy, Yy, Xw, Yw, 9);
 First_Ball_X = Ball_Order_X{First_Ball};
 First_Ball_Y = Ball_Order_Y{First_Ball};
 IdxTouch = GetTouchIdx(First_Ball_X,First_Ball_Y, Xmin, Xmax, Ymin, Ymax, 9);
@@ -49,7 +49,7 @@ scatter(First_Ball_X(IdxTouch), First_Ball_Y(IdxTouch), circleSize, 'g', 'LineWi
 %texte sous le graphique
 color = ["red"; "yellow"; "white"];
 
-[FirstBall,SecondBall,LastBall, num_ball] = GetBallMoveOrder(Xr, Yr, Xy, Yy, Xw, Yw, MoveDistPx);
+[FirstBall,SecondBall,LastBall, num_ball] = GetBallMoveOrder(Xr, Yr, Xy, Yy, Xw, Yw, 9);
 num_touched = length(GetTouchIdx(Ball_Order_X{First_Ball},Ball_Order_Y{First_Ball},Xmin, Xmax, Ymin, Ymax, 9));
 result = ["win","lose"];
 red_dist = GetBallPathLength(Xr,Yr);
