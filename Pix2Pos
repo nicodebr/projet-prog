@@ -1,0 +1,17 @@
+#include<stdio.h>
+#include<string.h>
+#include<math.h>
+#include<stdlib.h>
+
+int main(int argc, char* argv[]) {
+    
+    FILE* Pixmap;
+        Pixmap = fopen("Pixmap(T1-218)(1).bin", "rb");
+        
+        if (Pixmap == NULL) {
+            printf("erreur, le ficher ne peut pas s'ouvrir correctement");
+            return -1;
+        }
+        fclose(Pixmap);
+
+}
