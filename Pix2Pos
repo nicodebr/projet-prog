@@ -4,14 +4,65 @@
 #include<stdlib.h>
 
 int main(int argc, char* argv[]) {
-    
-    FILE* Pixmap;
-        Pixmap = fopen("Pixmap(T1-218)(1).bin", "rb");
-        
-        if (Pixmap == NULL) {
-            printf("erreur, le ficher ne peut pas s'ouvrir correctement");
-            return -1;
-        }
-        fclose(Pixmap);
 
+    if (argc < 2) {
+        printf("Erreur : veuillez spécifier le nom du fichier Pixmap en argument\n");
+        return -1;
+    }
+
+    FILE* Pixmap;
+    Pixmap = fopen(argv[1], "rb");
+
+    if (Pixmap == NULL) {
+        printf("Erreur : le fichier Pixmap ne peut pas s'ouvrir correctement\n");
+        return -1;
+    }
+    
+// Lecture de la largeur et de la hauteur de l'image
+    int width, height;
+    fread(&width, sizeof(int), 1, Pixmap);
+    fread(&height, sizeof(int), 1, Pixmap);
+    
+    // Valider les bornes de la taille de l'image
+    if (width <= 0 || height <= 0) {
+        printf("Erreur : La taille de l'image est invalide.\n");
+        return -1;
+    }
+    
+    // Lire les couleurs des boules et les coordonnées du billard à partir des arguments de la ligne de commande
+    int red_min, red_max, yellow_min, yellow_max, white_min, white_max, table_min, table_max;
+    int table_x, table_y;
+    
+    if (argc != 11) {
+        printf("Erreur : Nombre incorrect d'arguments de la ligne de commande.\n");
+        return -1;
+    }
+    
+    red_min = atoi(argv[2]);
+    red_max = atoi(argv[3]);
+    yellow_min = atoi(argv[4]);
+    yellow_max = atoi(argv[5]);
+    white_min = atoi(argv[6]);
+    white_max = atoi(argv[7]);
+    table_min = atoi(argv[8]);
+    table_max = atoi(argv[9]);
+    table_x = atoi(argv[10]);
+    table_y = atoi(argv[11]);
+    
+    // Valider les bornes des couleurs et des coordonnées du billard
+    if (red_min < 0 || red_min > 0xFFFFFF || red_max < 0 || red_max > 0xFFFFFF || red_min > red_max ||
+        yellow_min < 0 || yellow_min > 0xFFFFFF || yellow_max < 0 || yellow_max > 0xFFFFFF || yellow_min > yellow_max ||
+        white_min < 0 || white_min > 0xFFFFFF || white_max < 0 || white_max > 0xFFFFFF || white_min > white_max ||
+        table_min < 0 || table_min > 0xFFFFFF || table_max < 0 || table_max > 0xFFFFFF || table_min > table_max ||
+        table_x < 0 || table_x >= width || table_y < 0 || table_y >= height) {
+        printf("Erreur : Les bornes des couleurs et des coordonnées du billard sont invalides.\n");
+        return -1;
+    }
+
+    fclose(Pixmap);
 }
+
+
+    
+    
+ 
