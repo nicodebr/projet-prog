@@ -4,7 +4,8 @@
 #include<stdlib.h>
 
 int main(int argc, char* argv[]) {
-
+    
+    //ouverture du fichier
     if (argc < 2) {
         printf("Erreur : veuillez spécifier le nom du fichier Pixmap en argument\n");
         return -1;
