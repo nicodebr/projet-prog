@@ -3,6 +3,12 @@
 #include<math.h>
 #include<stdlib.h>
 
+typedef struct {
+    int x;
+    int y;
+    int score;
+} Ball;
+
 int main(int argc, char* argv[]) {
     
     //ouverture du fichier
@@ -19,14 +25,24 @@ int main(int argc, char* argv[]) {
         return -1;
     }
     
+// point 2 lecture du fichier
 // Lecture de la largeur et de la hauteur de l'image
-    int width, height;
-    fread(&width, sizeof(int), 1, Pixmap);
-    fread(&height, sizeof(int), 1, Pixmap);
-    
-    // Valider les bornes de la taille de l'image
+    unsigned int width, height;
+    if (fread(&width, sizeof(unsigned int), 1, Pixmap) != 1) {
+        printf("Erreur : impossible de lire la largeur de l'image\n");
+        fclose(Pixmap);
+        return -1;
+    }
+    if (fread(&height, sizeof(unsigned int), 1, Pixmap) != 1) {
+        printf("Erreur : impossible de lire la hauteur de l'image\n");
+        fclose(Pixmap);
+        return -1;
+    }
+
+    // Vérification des bornes de la largeur et de la hauteur
     if (width <= 0 || height <= 0) {
-        printf("Erreur : La taille de l'image est invalide.\n");
+        printf("Erreur : les dimensions de l'image sont incorrectes\n");
+        fclose(Pixmap);
         return -1;
     }
     
@@ -59,11 +75,29 @@ int main(int argc, char* argv[]) {
         printf("Erreur : Les bornes des couleurs et des coordonnées du billard sont invalides.\n");
         return -1;
     }
+    
+    // Point 3 lire les pixels et stocker dans un tableau dynamique
+    // Allocation dynamique du tableau de pixels
+    unsigned int* pixels = malloc(width * height * sizeof(unsigned int));
+    if (pixels == NULL) {
+        printf("Erreur : impossible d'allouer suffisamment de mémoire\n");
+        fclose(Pixmap);
+        return -1;
+    }
 
+    // Lecture de tous les pixels de l'image
+    if (fread(pixels, sizeof(unsigned int), width * height, Pixmap) != width * height) {
+        printf("Erreur : impossible de lire tous les pixels de l'image\n");
+        fclose(Pixmap);
+        free(pixels);
+        return -1;
+    }
+    
+    // Fermeture du fichier
     fclose(Pixmap);
+    
+    // Libération de la mémoire allouée pour le tableau de pixels
+    free(pixels);
+    
+      return 0;
 }
-
-
-    
-    
- 
