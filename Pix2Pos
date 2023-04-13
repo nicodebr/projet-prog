@@ -50,10 +50,10 @@ int main(int argc, char* argv[]) {
     int red_min, red_max, yellow_min, yellow_max, white_min, white_max, table_min, table_max;
     int table_x, table_y;
     
-    if (argc != 11) {
-        printf("Erreur : Nombre incorrect d'arguments de la ligne de commande.\n");
-        return -1;
-    }
+   if (argc != 12) {
+     printf("Erreur : Nombre incorrect d'arguments de la ligne de commande.\n");
+     return -1;
+}
     
     red_min = atoi(argv[2]);
     red_max = atoi(argv[3]);
