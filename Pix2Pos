@@ -21,7 +21,6 @@ int main(int argc, char* argv[]) {
     if (fopen_s(&Pixmap, argv[1], "rb") != 0) {
         printf("Erreur : le fichier Pixmap ne peut pas s'ouvrir correctement\n");
         return -1;
-        // apparemment remplacer par Pixmap = fopen(argv[1], "rb")
     }
 
     // point 2 lecture du fichier
@@ -49,7 +48,7 @@ int main(int argc, char* argv[]) {
     int red_min, red_max, yellow_min, yellow_max, white_min, white_max, table_min, table_max;
     int table_x, table_y;
 
-    if (argc != 30) {
+    if (argc != 12) {
         printf("Erreur : Nombre incorrect d'arguments de la ligne de commande.\n");
         return -1;
     }
@@ -119,6 +118,98 @@ int main(int argc, char* argv[]) {
         free(pixels);
         return -1;
     }
+
+    //initialisation des struct pour chaque boules
+    Ball Ball_red = { -1, -1, 0 };
+    Ball Ball_white = { -1, -1, 0 };
+    Ball Ball_yellow = { -1, -1, 0 };
+    int new_score;
+
+    for (int i = 6; i < height - 6; i++) {
+        for (int j = 6; j < width - 6; j++) {
+            p = pixels[i * height + j]; //pixel au centre du carré 13*13
+            unsigned int r = (p >> 16) & 0xFF; // composante rouge
+            unsigned int g = (p >> 8) & 0xFF;  // composante verte
+            unsigned int b = p & 0xFF;         // composante bleue
+            //test si le pixel central est rouge
+            if (r >= RedBall_Rmin && r <= RedBall_Rmax && g >= RedBall_Gmin && g <= RedBall_Gmax && b >= RedBall_Bmin && b <= RedBall_Bmax) {
+                new_score = 0;
+                for (int m = i - 6; m < i + 6; m++) {
+                    for (int n = j - 6; n < j + 6; n++) {
+                        p1 = pixels[m * height + n]
+                        unsigned int r1 = (p1 >> 16) & 0xFF; // composante rouge
+                        unsigned int g1 = (p1 >> 8) & 0xFF;  // composante verte
+                        unsigned int b1 = p1 & 0xFF;         // composante bleue
+                        if (r1 >= RedBall_Rmin && r <= RedBall_Rmax &&
+                            g1 >= RedBall_Gmin && g <= RedBall_Gmax &&
+                            b1 >= RedBall_Bmin && b <= RedBall_Bmax) {
+                            new_score++;
+                        }
+                    }
+                }
+                if (new_score>ball_red.score) {
+                    ball_red.x = j;
+                    ball_red.y = i;
+                }
+            }
+            //test si le pixel central est blanc
+            if (r >= WhiteBall_Rmin && r <= WhiteBall_Rmax && g >= WhiteBall_Gmin && g <= WhiteBall_Gmax && b >= WhiteBall_Bmin && b <= WhiteBall_Bmax) {
+                new_score = 0;
+                for (int m = i - 6; m < i + 6; m++) {
+                    for (int n = j - 6; n < j + 6; n++) {
+                        p1 = pixels[m * height + n];
+                        unsigned int r1 = (p1 >> 16) & 0xFF; // composante rouge
+                        unsigned int g1 = (p1 >> 8) & 0xFF;  // composante verte
+                        unsigned int b1 = p1 & 0xFF;         // composante bleue
+                        if (r1 >= WhiteBall_Rmin && r1 <= WhiteBall_Rmax &&
+                            g1 >= WhiteBall_Gmin && g1 <= WhiteBall_Gmax &&
+                            b1 >= WhiteBall_Bmin && b1 <= WhiteBall_Bmax) {
+                            new_score++;
+                        }
+                    }
+                }
+                if (ball_white.score > previous_score) {
+                    ball_white.x = j;
+                    ball_white.y = i;
+                }
+            }
+            //test si le pixel central est jaune
+            if (r >= YellowBall_Rmin && r <= YellowBall_Rmax && g >= YellowBall_Gmin && g <= YellowBall_Gmax && b >= YellowBall_Bmin && b <= YellowBall_Bmax) {
+                new_score = 0;
+                for (int m = i - 6; m < i + 6; m++) {
+                    for (int n = j - 6; n < j + 6; n++) {
+                        p1 = pixels[m * height + n];
+                        unsigned int r1 = (p1 >> 16) & 0xFF; // composante rouge
+                        unsigned int g1 = (p1 >> 8) & 0xFF;  // composante verte
+                        unsigned int b1 = p1 & 0xFF;         // composante bleue
+                        if (r1 >= YellowBall_Rmin && r1 <= YellowBall_Rmax &&
+                            g1 >= YellowBall_Gmin && g1 <= YellowBall_Gmax &&
+                            b1 >= YellowBall_Bmin && b1 <= YellowBall_Bmax) {
+                            new_score++;
+                        }
+                    }
+                }
+                if (new_score > ball_yellow.score) {
+                    ball_yellow.x = j;
+                    ball_yellow.y = i;
+                }
+            }
+
+
+        }
+    }
+
+    // ouvrir le fichier en mode écriture
+    FILE* fichier = fopen("Pos.txt", "w");
+
+    // écrire les informations dans le fichier
+    fprintf(fichier, "Red: %d, %d, %d\n", Ball_red.x, Ball_red.y, Ball_red.score);
+    fprintf(fichier, "Yellow: %d, %d, %d\n", Ball_yellow.x, Ball_yellow.y, Ball_yellow.score);
+    fprintf(fichier, "White: %d, %d, %d\n", Ball_white.x, Ball_white.y, Ball_white.score);
+
+    // fermer le fichier
+    fclose(fichier);
+
 
     // Fermeture du fichier
     fclose(Pixmap);
