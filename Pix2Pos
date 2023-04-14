@@ -21,6 +21,7 @@ int main(int argc, char* argv[]) {
     if (fopen_s(&Pixmap, argv[1], "rb") != 0) {
         printf("Erreur : le fichier Pixmap ne peut pas s'ouvrir correctement\n");
         return -1;
+        // apparemment remplacer par Pixmap = fopen(argv[1], "rb")
     }
 
     // point 2 lecture du fichier
@@ -48,7 +49,7 @@ int main(int argc, char* argv[]) {
     int red_min, red_max, yellow_min, yellow_max, white_min, white_max, table_min, table_max;
     int table_x, table_y;
 
-    if (argc != 12) {
+    if (argc != 30) {
         printf("Erreur : Nombre incorrect d'arguments de la ligne de commande.\n");
         return -1;
     }
