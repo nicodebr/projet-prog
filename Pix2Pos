@@ -10,7 +10,7 @@ typedef struct {
 } Ball;
 
 int main(int argc, char* argv[]) {
-    
+
     //ouverture du fichier
     if (argc < 2) {
         printf("Erreur : veuillez spécifier le nom du fichier Pixmap en argument\n");
@@ -18,15 +18,13 @@ int main(int argc, char* argv[]) {
     }
 
     FILE* Pixmap;
-    Pixmap = fopen(argv[1], "rb");
-
-    if (Pixmap == NULL) {
+    if (fopen_s(&Pixmap, argv[1], "rb") != 0) {
         printf("Erreur : le fichier Pixmap ne peut pas s'ouvrir correctement\n");
         return -1;
     }
-    
-// point 2 lecture du fichier
-// Lecture de la largeur et de la hauteur de l'image
+
+    // point 2 lecture du fichier
+    // Lecture de la largeur et de la hauteur de l'image
     unsigned int width, height;
     if (fread(&width, sizeof(unsigned int), 1, Pixmap) != 1) {
         printf("Erreur : impossible de lire la largeur de l'image\n");
@@ -45,16 +43,16 @@ int main(int argc, char* argv[]) {
         fclose(Pixmap);
         return -1;
     }
-    
+
     // Lire les couleurs des boules et les coordonnées du billard à partir des arguments de la ligne de commande
     int red_min, red_max, yellow_min, yellow_max, white_min, white_max, table_min, table_max;
     int table_x, table_y;
-    
-   if (argc != 12) {
-     printf("Erreur : Nombre incorrect d'arguments de la ligne de commande.\n");
-     return -1;
-}
-    
+
+    if (argc != 12) {
+        printf("Erreur : Nombre incorrect d'arguments de la ligne de commande.\n");
+        return -1;
+    }
+
     const unsigned int BillardBox_Lmin = atoi(argv[1]);
     const unsigned int BillardBox_Lmax = atoi(argv[2]);
     const unsigned int BillardBox_Cmin = atoi(argv[3]);
@@ -87,23 +85,23 @@ int main(int argc, char* argv[]) {
 
     // Valider les bornes des couleurs et des coordonnées du billard
     if (RedBall_Rmin < 0 || RedBall_Rmin > 0xFFFFFF || RedBall_Rmax < 0 || RedBall_Rmax > 0xFFFFFF || RedBall_Rmin > RedBall_Rmax ||
-    YellowBall_Rmin < 0 || YellowBall_Rmin > 0xFFFFFF || YellowBall_Rmax < 0 || YellowBall_Rmax > 0xFFFFFF || YellowBall_Rmin > YellowBall_Rmax ||
-    WhiteBall_Rmin < 0 || WhiteBall_Rmin > 0xFFFFFF || WhiteBall_Rmax < 0 || WhiteBall_Rmax > 0xFFFFFF || WhiteBall_Rmin > WhiteBall_Rmax ||
-    BG_Rmin < 0 || BG_Rmin > 0xFFFFFF || BG_Rmax < 0 || BG_Rmax > 0xFFFFFF || BG_Rmin > BG_Rmax ||
-    RedBall_Gmin < 0 || RedBall_Gmin > 0xFFFFFF || RedBall_Gmax < 0 || RedBall_Gmax > 0xFFFFFF || RedBall_Gmin > RedBall_Gmax ||
-    YellowBall_Gmin < 0 || YellowBall_Gmin > 0xFFFFFF || YellowBall_Gmax < 0 || YellowBall_Gmax > 0xFFFFFF || YellowBall_Gmin > YellowBall_Gmax ||
-    WhiteBall_Gmin < 0 || WhiteBall_Gmin > 0xFFFFFF || WhiteBall_Gmax < 0 || WhiteBall_Gmax > 0xFFFFFF || WhiteBall_Gmin > WhiteBall_Gmax ||
-    BG_Gmin < 0 || BG_Gmin > 0xFFFFFF || BG_Gmax < 0 || BG_Gmax > 0xFFFFFF || BG_Gmin > BG_Gmax ||
-    RedBall_Bmin < 0 || RedBall_Bmin > 0xFFFFFF || RedBall_Bmax < 0 || RedBall_Bmax > 0xFFFFFF || RedBall_Bmin > RedBall_Bmax ||
-    YellowBall_Bmin < 0 || YellowBall_Bmin > 0xFFFFFF || YellowBall_Bmax < 0 || YellowBall_Bmax > 0xFFFFFF || YellowBall_Bmin > YellowBall_Bmax ||
-    WhiteBall_Bmin < 0 || WhiteBall_Bmin > 0xFFFFFF || WhiteBall_Bmax < 0 || WhiteBall_Bmax > 0xFFFFFF || WhiteBall_Bmin > WhiteBall_Bmax ||
-    BG_Bmin < 0 || BG_Bmin > 0xFFFFFF || BG_Bmax < 0 || BG_Bmax > 0xFFFFFF || BG_Bmin > BG_Bmax ||
-    BillardBox_Lmin < 0 || BillardBox_Lmin >= width || BillardBox_Lmax < 0 || BillardBox_Lmax >= width || BillardBox_Lmin > BillardBox_Lmax ||
-    BillardBox_Cmin < 0 || BillardBox_Cmin >= height || BillardBox_Cmax < 0 || BillardBox_Cmax >= height || BillardBox_Cmin > BillardBox_Cmax) {
+        YellowBall_Rmin < 0 || YellowBall_Rmin > 0xFFFFFF || YellowBall_Rmax < 0 || YellowBall_Rmax > 0xFFFFFF || YellowBall_Rmin > YellowBall_Rmax ||
+        WhiteBall_Rmin < 0 || WhiteBall_Rmin > 0xFFFFFF || WhiteBall_Rmax < 0 || WhiteBall_Rmax > 0xFFFFFF || WhiteBall_Rmin > WhiteBall_Rmax ||
+        BG_Rmin < 0 || BG_Rmin > 0xFFFFFF || BG_Rmax < 0 || BG_Rmax > 0xFFFFFF || BG_Rmin > BG_Rmax ||
+        RedBall_Gmin < 0 || RedBall_Gmin > 0xFFFFFF || RedBall_Gmax < 0 || RedBall_Gmax > 0xFFFFFF || RedBall_Gmin > RedBall_Gmax ||
+        YellowBall_Gmin < 0 || YellowBall_Gmin > 0xFFFFFF || YellowBall_Gmax < 0 || YellowBall_Gmax > 0xFFFFFF || YellowBall_Gmin > YellowBall_Gmax ||
+        WhiteBall_Gmin < 0 || WhiteBall_Gmin > 0xFFFFFF || WhiteBall_Gmax < 0 || WhiteBall_Gmax > 0xFFFFFF || WhiteBall_Gmin > WhiteBall_Gmax ||
+        BG_Gmin < 0 || BG_Gmin > 0xFFFFFF || BG_Gmax < 0 || BG_Gmax > 0xFFFFFF || BG_Gmin > BG_Gmax ||
+        RedBall_Bmin < 0 || RedBall_Bmin > 0xFFFFFF || RedBall_Bmax < 0 || RedBall_Bmax > 0xFFFFFF || RedBall_Bmin > RedBall_Bmax ||
+        YellowBall_Bmin < 0 || YellowBall_Bmin > 0xFFFFFF || YellowBall_Bmax < 0 || YellowBall_Bmax > 0xFFFFFF || YellowBall_Bmin > YellowBall_Bmax ||
+        WhiteBall_Bmin < 0 || WhiteBall_Bmin > 0xFFFFFF || WhiteBall_Bmax < 0 || WhiteBall_Bmax > 0xFFFFFF || WhiteBall_Bmin > WhiteBall_Bmax ||
+        BG_Bmin < 0 || BG_Bmin > 0xFFFFFF || BG_Bmax < 0 || BG_Bmax > 0xFFFFFF || BG_Bmin > BG_Bmax ||
+        BillardBox_Lmin < 0 || BillardBox_Lmin >= width || BillardBox_Lmax < 0 || BillardBox_Lmax >= width || BillardBox_Lmin > BillardBox_Lmax ||
+        BillardBox_Cmin < 0 || BillardBox_Cmin >= height || BillardBox_Cmax < 0 || BillardBox_Cmax >= height || BillardBox_Cmin > BillardBox_Cmax) {
         printf("Erreur : Les bornes des couleurs et des coordonnées du billard sont invalides.\n");
         return -1;
     }
-    
+
     // Point 3 lire les pixels et stocker dans un tableau dynamique
     // Allocation dynamique du tableau de pixels
     unsigned int* pixels = malloc(width * height * sizeof(unsigned int));
@@ -120,12 +118,12 @@ int main(int argc, char* argv[]) {
         free(pixels);
         return -1;
     }
-    
+
     // Fermeture du fichier
     fclose(Pixmap);
-    
+
     // Libération de la mémoire allouée pour le tableau de pixels
     free(pixels);
-    
-      return 0;
+
+    return 0;
 }
