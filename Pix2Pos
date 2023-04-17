@@ -17,11 +17,19 @@ int main(int argc, char* argv[]) {
         return -1;
     }
 
+   
+   //FILE* Pixmap;
+    //if (fopen_s(&Pixmap, argv[1], "rb") != 0) {
+        //printf("Erreur : le fichier Pixmap ne peut pas s'ouvrir correctement\n");
+        //return -1;
+    //}
     FILE* Pixmap;
-    if (fopen_s(&Pixmap, argv[1], "rb") != 0) {
+    Pixmap = fopen("Pixmap.bin", "rb");
+    if (Pixmap == NULL) {
         printf("Erreur : le fichier Pixmap ne peut pas s'ouvrir correctement\n");
         return -1;
     }
+
 
     // point 2 lecture du fichier
     // Lecture de la largeur et de la hauteur de l'image
