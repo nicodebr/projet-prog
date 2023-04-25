@@ -3,33 +3,23 @@
 #include<math.h>
 #include<stdlib.h>
 
-typedef struct {
+#pragma warning(disable : 4996)
+
+struct ball {
     int x;
     int y;
     int score;
-} Ball;
+};
+
 
 int main(int argc, char* argv[]) {
 
-    //ouverture du fichier
-    if (argc < 2) {
-        printf("Erreur : veuillez spécifier le nom du fichier Pixmap en argument\n");
-        return -1;
-    }
-
-   
-   //FILE* Pixmap;
-    //if (fopen_s(&Pixmap, argv[1], "rb") != 0) {
-        //printf("Erreur : le fichier Pixmap ne peut pas s'ouvrir correctement\n");
-        //return -1;
-    //}
     FILE* Pixmap;
-    Pixmap = fopen("Pixmap.bin", "rb");
+    Pixmap = fopen("Pixmap(T1-218).bin", "rb");
     if (Pixmap == NULL) {
         printf("Erreur : le fichier Pixmap ne peut pas s'ouvrir correctement\n");
         return -1;
     }
-
 
     // point 2 lecture du fichier
     // Lecture de la largeur et de la hauteur de l'image
@@ -61,7 +51,6 @@ int main(int argc, char* argv[]) {
         return -1;
     }
 
-    
     const unsigned int BillardBox_Lmin = atoi(argv[1]);
     const unsigned int BillardBox_Lmax = atoi(argv[2]);
     const unsigned int BillardBox_Cmin = atoi(argv[3]);
@@ -113,7 +102,34 @@ int main(int argc, char* argv[]) {
 
     // Point 3 lire les pixels et stocker dans un tableau dynamique
     // Allocation dynamique du tableau de pixels
-    unsigned int* pixels = malloc(width * height * sizeof(unsigned int));
+    unsigned int LengthWidth[2] = { 0 };
+    size_t size = sizeof(unsigned int);
+    size_t nmemb = 2;
+    size_t read_elements = fread(LengthWidth, size, nmemb, Pixmap);
+
+    if (read_elements != nmemb) {
+        fprintf(stderr, "Erreur de lecture. Le nombre d'éléments lus (%zu) est différent de celui attendu (%zu).\n", read_elements, nmemb);
+        return -1;
+    }
+    else if (LengthWidth[0] < 100 || LengthWidth[1] < 100 || LengthWidth[0] > 1000 || LengthWidth[1]>1000) {
+        fprintf(stderr, "La largueur ou la hauteur est en dehors des bornes raisonnables");
+        return -1;
+    }
+    else {
+        printf("Largeur : %u\n", LengthWidth[0]);
+        printf("Hauteur : %u\n", LengthWidth[1]);
+    }
+
+    //Création du malloc
+    unsigned int* pixels = NULL;
+    unsigned int tab = LengthWidth[0] * LengthWidth[1];
+
+
+
+    // Allouer de l'espace mémoire pour stocker les pixels de l'image
+    pixels = malloc(tab * size);
+
+
     if (pixels == NULL) {
         printf("Erreur : impossible d'allouer suffisamment de mémoire\n");
         fclose(Pixmap);
@@ -156,7 +172,7 @@ int main(int argc, char* argv[]) {
                         }
                     }
                 }
-                if (new_score>ball_red.score) {
+                if (new_score > ball_red.score) {
                     ball_red.x = j;
                     ball_red.y = i;
                     ball_red.score = new_score;
