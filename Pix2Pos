@@ -12,6 +12,7 @@ struct ball {
 };
 
 
+
 int main(int argc, char* argv[]) {
 
     FILE* Pixmap;
@@ -21,19 +22,16 @@ int main(int argc, char* argv[]) {
         return -1;
     }
 
+    unsigned int width_1[2] = { 0 };
+    size_t size = sizeof(unsigned int);
+    size_t nmemb = 2;
+    size_t read_elements = fread(width_1, size, nmemb, Pixmap);
+    unsigned int height = width_1[1];
+    unsigned int width = width_1[0];
+
+
     // point 2 lecture du fichier
     // Lecture de la largeur et de la hauteur de l'image
-    unsigned int width, height;
-    if (fread(&width, sizeof(unsigned int), 1, Pixmap) != 1) {
-        printf("Erreur : impossible de lire la largeur de l'image\n");
-        fclose(Pixmap);
-        return -1;
-    }
-    if (fread(&height, sizeof(unsigned int), 1, Pixmap) != 1) {
-        printf("Erreur : impossible de lire la hauteur de l'image\n");
-        fclose(Pixmap);
-        return -1;
-    }
 
     // Vérification des bornes de la largeur et de la hauteur
     if (width <= 0 || height <= 0) {
@@ -51,6 +49,7 @@ int main(int argc, char* argv[]) {
         return -1;
     }
 
+    const char* filename = argv[0];
     const unsigned int BillardBox_Lmin = atoi(argv[1]);
     const unsigned int BillardBox_Lmax = atoi(argv[2]);
     const unsigned int BillardBox_Cmin = atoi(argv[3]);
@@ -82,47 +81,29 @@ int main(int argc, char* argv[]) {
     const unsigned int BallDiameter = atoi(argv[29]);
 
     // Valider les bornes des couleurs et des coordonnées du billard
-    if (RedBall_Rmin < 0 || RedBall_Rmin > 0xFFFFFF || RedBall_Rmax < 0 || RedBall_Rmax > 0xFFFFFF || RedBall_Rmin > RedBall_Rmax ||
-        YellowBall_Rmin < 0 || YellowBall_Rmin > 0xFFFFFF || YellowBall_Rmax < 0 || YellowBall_Rmax > 0xFFFFFF || YellowBall_Rmin > YellowBall_Rmax ||
-        WhiteBall_Rmin < 0 || WhiteBall_Rmin > 0xFFFFFF || WhiteBall_Rmax < 0 || WhiteBall_Rmax > 0xFFFFFF || WhiteBall_Rmin > WhiteBall_Rmax ||
-        BG_Rmin < 0 || BG_Rmin > 0xFFFFFF || BG_Rmax < 0 || BG_Rmax > 0xFFFFFF || BG_Rmin > BG_Rmax ||
-        RedBall_Gmin < 0 || RedBall_Gmin > 0xFFFFFF || RedBall_Gmax < 0 || RedBall_Gmax > 0xFFFFFF || RedBall_Gmin > RedBall_Gmax ||
-        YellowBall_Gmin < 0 || YellowBall_Gmin > 0xFFFFFF || YellowBall_Gmax < 0 || YellowBall_Gmax > 0xFFFFFF || YellowBall_Gmin > YellowBall_Gmax ||
-        WhiteBall_Gmin < 0 || WhiteBall_Gmin > 0xFFFFFF || WhiteBall_Gmax < 0 || WhiteBall_Gmax > 0xFFFFFF || WhiteBall_Gmin > WhiteBall_Gmax ||
-        BG_Gmin < 0 || BG_Gmin > 0xFFFFFF || BG_Gmax < 0 || BG_Gmax > 0xFFFFFF || BG_Gmin > BG_Gmax ||
-        RedBall_Bmin < 0 || RedBall_Bmin > 0xFFFFFF || RedBall_Bmax < 0 || RedBall_Bmax > 0xFFFFFF || RedBall_Bmin > RedBall_Bmax ||
-        YellowBall_Bmin < 0 || YellowBall_Bmin > 0xFFFFFF || YellowBall_Bmax < 0 || YellowBall_Bmax > 0xFFFFFF || YellowBall_Bmin > YellowBall_Bmax ||
-        WhiteBall_Bmin < 0 || WhiteBall_Bmin > 0xFFFFFF || WhiteBall_Bmax < 0 || WhiteBall_Bmax > 0xFFFFFF || WhiteBall_Bmin > WhiteBall_Bmax ||
-        BG_Bmin < 0 || BG_Bmin > 0xFFFFFF || BG_Bmax < 0 || BG_Bmax > 0xFFFFFF || BG_Bmin > BG_Bmax ||
-        BillardBox_Lmin < 0 || BillardBox_Lmin >= width || BillardBox_Lmax < 0 || BillardBox_Lmax >= width || BillardBox_Lmin > BillardBox_Lmax ||
-        BillardBox_Cmin < 0 || BillardBox_Cmin >= height || BillardBox_Cmax < 0 || BillardBox_Cmax >= height || BillardBox_Cmin > BillardBox_Cmax) {
-        printf("Erreur : Les bornes des couleurs et des coordonnées du billard sont invalides.\n");
-        return -1;
-    }
+
 
     // Point 3 lire les pixels et stocker dans un tableau dynamique
     // Allocation dynamique du tableau de pixels
-    unsigned int LengthWidth[2] = { 0 };
-    size_t size = sizeof(unsigned int);
-    size_t nmemb = 2;
-    size_t read_elements = fread(LengthWidth, size, nmemb, Pixmap);
 
+    
     if (read_elements != nmemb) {
         fprintf(stderr, "Erreur de lecture. Le nombre d'éléments lus (%zu) est différent de celui attendu (%zu).\n", read_elements, nmemb);
         return -1;
     }
-    else if (LengthWidth[0] < 100 || LengthWidth[1] < 100 || LengthWidth[0] > 1000 || LengthWidth[1]>1000) {
+    else if (width < 100 || height < 100 || width > 1000 || height>1000) {
         fprintf(stderr, "La largueur ou la hauteur est en dehors des bornes raisonnables");
         return -1;
     }
     else {
-        printf("Largeur : %u\n", LengthWidth[0]);
-        printf("Hauteur : %u\n", LengthWidth[1]);
+        pprintf("Largeur : %u\n", width);
+        printf("Hauteur : %u\n", height);
     }
 
     //Création du malloc
     unsigned int* pixels = NULL;
-    unsigned int tab = LengthWidth[0] * LengthWidth[1];
+    unsigned int tab = width * height;
+    
 
 
 
@@ -137,7 +118,7 @@ int main(int argc, char* argv[]) {
     }
 
     // Lecture de tous les pixels de l'image
-    if (fread(pixels, sizeof(unsigned int), width * height, Pixmap) != width * height) {
+    if (fread(pixels, sizeof(unsigned int), tab, Pixmap) != tab) {
         printf("Erreur : impossible de lire tous les pixels de l'image\n");
         fclose(Pixmap);
         free(pixels);
@@ -173,8 +154,8 @@ int main(int argc, char* argv[]) {
                     }
                 }
                 if (new_score > ball_red.score) {
-                    ball_red.x = j;
-                    ball_red.y = i;
+                    ball_red.x = j-6;
+                    ball_red.y = i-6;
                     ball_red.score = new_score;
                 }
             }
@@ -195,8 +176,8 @@ int main(int argc, char* argv[]) {
                     }
                 }
                 if (new_score > ball_white.score) {
-                    ball_white.x = j;
-                    ball_white.y = i;
+                    ball_white.x = j-6;
+                    ball_white.y = i-6;
                     ball_white.score = new_score;
                 }
             }
@@ -217,8 +198,8 @@ int main(int argc, char* argv[]) {
                     }
                 }
                 if (new_score > ball_yellow.score) {
-                    ball_yellow.x = j;
-                    ball_yellow.y = i;
+                    ball_yellow.x = j-6;
+                    ball_yellow.y = i-6;
                     ball_yellow.score = new_score;
                 }
             }
