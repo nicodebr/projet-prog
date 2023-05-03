@@ -96,7 +96,7 @@ int main(int argc, char* argv[]) {
         return -1;
     }
     else {
-        pprintf("Largeur : %u\n", width);
+        printf("Largeur : %u\n", width);
         printf("Hauteur : %u\n", height);
     }
 
@@ -129,84 +129,71 @@ int main(int argc, char* argv[]) {
     struct ball ball_red = { -1, -1, 0 };
     struct ball ball_white = { -1, -1, 0 };
     struct ball ball_yellow = { -1, -1, 0 };
-    int new_score;
+    int score_red = 0;
+    int score_white = 0;
+    int score_yellow = 0;
 
-    for (int i = 6; i < height - 6; i++) {
-        for (int j = 6; j < width - 6; j++) {
-            unsigned int p = pixels[i * height + j]; //pixel au centre du carré 13*13
-            unsigned int r = (p >> 16) & 0xFF; // composante rouge
-            unsigned int g = (p >> 8) & 0xFF;  // composante verte
-            unsigned int b = p & 0xFF;         // composante bleue
+    for (int i = BillardBox_Lmin; i < BillardBox_Lmax-BallDiameter; i++) {
+        for (int j = BillardBox_Cmin; j < BillardBox_Cmax-BallDiameter; j++) {
             //test si le pixel central est rouge
-            if (r >= RedBall_Rmin && r <= RedBall_Rmax && g >= RedBall_Gmin && g <= RedBall_Gmax && b >= RedBall_Bmin && b <= RedBall_Bmax) {
-                new_score = 0;
-                for (int m = i - 6; m < i + 6; m++) {
-                    for (int n = j - 6; n < j + 6; n++) {
-                        unsigned int p1 = pixels[m * height + n];
-                        unsigned int r1 = (p1 >> 16) & 0xFF; // composante rouge
-                        unsigned int g1 = (p1 >> 8) & 0xFF;  // composante verte
-                        unsigned int b1 = p1 & 0xFF;         // composante bleue
-                        if (r1 >= RedBall_Rmin && r <= RedBall_Rmax &&
-                            g1 >= RedBall_Gmin && g <= RedBall_Gmax &&
-                            b1 >= RedBall_Bmin && b <= RedBall_Bmax) {
-                            new_score++;
-                        }
+            score_red = 0;
+            score_yellow = 0;
+            score_white = 0;
+            for (int m = i; m < i + BallDiameter; m++) {
+                for (int n = j; n < j + BallDiameter; n++) {
+                    unsigned int p1 = pixels[m * width + n];
+                    unsigned int r1 = (p1 >> 16) & 0xFF; // composante rouge
+                    unsigned int g1 = (p1 >> 8) & 0xFF;  // composante verte
+                    unsigned int b1 = p1 & 0xFF;         // composante bleue
+                    if (r1 >= RedBall_Rmin && r1 <= RedBall_Rmax && g1 >= RedBall_Gmin && g1 <= RedBall_Gmax && b1 >= RedBall_Bmin && b1 <= RedBall_Bmax) {
+                        score_red++;
                     }
                 }
-                if (new_score > ball_red.score) {
-                    ball_red.x = j-6;
-                    ball_red.y = i-6;
-                    ball_red.score = new_score;
-                }
+            }
+            if (score_red > ball_red.score) {
+                ball_red.x = j;
+                ball_red.y = i;
+                ball_red.score = score_red;
             }
             //test si le pixel central est blanc
-            if (r >= WhiteBall_Rmin && r <= WhiteBall_Rmax && g >= WhiteBall_Gmin && g <= WhiteBall_Gmax && b >= WhiteBall_Bmin && b <= WhiteBall_Bmax) {
-                new_score = 0;
-                for (int m = i - 6; m < i + 6; m++) {
-                    for (int n = j - 6; n < j + 6; n++) {
-                        unsigned int p1 = pixels[m * height + n];
-                        unsigned int r1 = (p1 >> 16) & 0xFF; // composante rouge
-                        unsigned int g1 = (p1 >> 8) & 0xFF;  // composante verte
-                        unsigned int b1 = p1 & 0xFF;         // composante bleue
-                        if (r1 >= WhiteBall_Rmin && r1 <= WhiteBall_Rmax &&
-                            g1 >= WhiteBall_Gmin && g1 <= WhiteBall_Gmax &&
-                            b1 >= WhiteBall_Bmin && b1 <= WhiteBall_Bmax) {
-                            new_score++;
-                        }
+            for (int m = i; m < i + BallDiameter; m++) {
+                for (int n = j; n < j + BallDiameter; n++) {
+                    unsigned int p1 = pixels[m * width + n];
+                    unsigned int r1 = (p1 >> 16) & 0xFF; // composante rouge
+                    unsigned int g1 = (p1 >> 8) & 0xFF;  // composante verte
+                    unsigned int b1 = p1 & 0xFF;         // composante bleue
+                    if (r1 >= WhiteBall_Rmin && r1 <= WhiteBall_Rmax && g1 >= WhiteBall_Gmin && g1 <= WhiteBall_Gmax && b1 >= WhiteBall_Bmin && b1 <= WhiteBall_Bmax) {
+                        score_white++;
                     }
                 }
-                if (new_score > ball_white.score) {
-                    ball_white.x = j-6;
-                    ball_white.y = i-6;
-                    ball_white.score = new_score;
-                }
             }
-            //test si le pixel central est jaune
-            if (r >= YellowBall_Rmin && r <= YellowBall_Rmax && g >= YellowBall_Gmin && g <= YellowBall_Gmax && b >= YellowBall_Bmin && b <= YellowBall_Bmax) {
-                new_score = 0;
-                for (int m = i - 6; m < i + 6; m++) {
-                    for (int n = j - 6; n < j + 6; n++) {
-                        unsigned int p1 = pixels[m * height + n];
-                        unsigned int r1 = (p1 >> 16) & 0xFF; // composante rouge
-                        unsigned int g1 = (p1 >> 8) & 0xFF;  // composante verte
-                        unsigned int b1 = p1 & 0xFF;         // composante bleue
-                        if (r1 >= YellowBall_Rmin && r1 <= YellowBall_Rmax &&
-                            g1 >= YellowBall_Gmin && g1 <= YellowBall_Gmax &&
-                            b1 >= YellowBall_Bmin && b1 <= YellowBall_Bmax) {
-                            new_score++;
-                        }
+            if (score_white > ball_white.score) {
+                ball_white.x = j;
+                ball_white.y = i;
+                ball_white.score = score_white;
+            }
+        //test si le pixel central est jaune
+            for (int m = i; m < i + BallDiameter; m++) {
+                for (int n = j; n < j + BallDiameter; n++) {
+                    unsigned int p1 = pixels[m * width + n];
+                    unsigned int r1 = (p1 >> 16) & 0xFF; // composante rouge
+                    unsigned int g1 = (p1 >> 8) & 0xFF;  // composante verte
+                    unsigned int b1 = p1 & 0xFF;         // composante bleue
+                    if (r1 >= YellowBall_Rmin && r1 <= YellowBall_Rmax && g1 >= YellowBall_Gmin && g1 <= YellowBall_Gmax && b1 >= YellowBall_Bmin && b1 <= YellowBall_Bmax) {
+                        score_yellow++;
                     }
                 }
-                if (new_score > ball_yellow.score) {
-                    ball_yellow.x = j-6;
-                    ball_yellow.y = i-6;
-                    ball_yellow.score = new_score;
-                }
             }
-
-
+            if (score_yellow > ball_yellow.score) {
+                ball_yellow.x = j;
+                ball_yellow.y = i;
+                ball_yellow.score = score_yellow;
+            }
         }
     }
+    printf("Red: %d, %d, %d\n", ball_red.x, ball_red.y, ball_red.score);
+    printf("Yellow: %d, %d, %d\n", ball_yellow.x, ball_yellow.y, ball_yellow.score);
+    printf("White: %d, %d, %d\n", ball_white.x, ball_white.y, ball_white.score);
 
     // ouvrir le fichier en mode écriture
     FILE* fichier_pos;
